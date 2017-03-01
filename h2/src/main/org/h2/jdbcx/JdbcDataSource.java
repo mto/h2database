@@ -11,6 +11,7 @@ import java.io.PrintWriter;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Iterator;
 import java.util.Properties;
 import java.util.logging.Logger;
 import javax.naming.Reference;
@@ -21,6 +22,11 @@ import javax.sql.DataSource;
 import javax.sql.PooledConnection;
 import javax.sql.XAConnection;
 import javax.sql.XADataSource;
+
+import com.hs.md.HSConfig;
+import com.hs.md.Profile;
+import com.hs.sql.ConnectionWrapper;
+import com.hs.sql.XAConnectionWrapper;
 import org.h2.Driver;
 import org.h2.jdbc.JdbcConnection;
 import org.h2.message.TraceObject;
@@ -73,6 +79,8 @@ public class JdbcDataSource extends TraceObject implements XADataSource,
     private String url = "";
     private String description;
 
+    private final Profile prof;
+
     static {
         org.h2.Driver.load();
     }
@@ -84,6 +92,11 @@ public class JdbcDataSource extends TraceObject implements XADataSource,
         initFactory();
         int id = getNextId(TraceObject.DATA_SOURCE);
         setTrace(factory.getTrace(), TraceObject.DATA_SOURCE, id);
+
+        HSConfig hsc = HSConfig.getInstance();
+        Iterator<Profile> profiles = hsc.getProfiles().values().iterator();
+
+        prof = profiles.next();
     }
 
     /**
@@ -156,8 +169,8 @@ public class JdbcDataSource extends TraceObject implements XADataSource,
     @Override
     public Connection getConnection() throws SQLException {
         debugCodeCall("getConnection");
-        return getJdbcConnection(userName,
-                StringUtils.cloneCharArray(passwordChars));
+        return new ConnectionWrapper(getJdbcConnection(userName,
+                StringUtils.cloneCharArray(passwordChars)), prof);
     }
 
     /**
@@ -174,7 +187,7 @@ public class JdbcDataSource extends TraceObject implements XADataSource,
         if (isDebugEnabled()) {
             debugCode("getConnection("+quote(user)+", \"\");");
         }
-        return getJdbcConnection(user, convertToCharArray(password));
+        return new ConnectionWrapper(getJdbcConnection(user, convertToCharArray(password)), prof);
     }
 
     private JdbcConnection getJdbcConnection(String user, char[] password)
@@ -348,8 +361,8 @@ public class JdbcDataSource extends TraceObject implements XADataSource,
     public XAConnection getXAConnection() throws SQLException {
         debugCodeCall("getXAConnection");
         int id = getNextId(XA_DATA_SOURCE);
-        return new JdbcXAConnection(factory, id, getJdbcConnection(userName,
-                StringUtils.cloneCharArray(passwordChars)));
+        return new XAConnectionWrapper(new JdbcXAConnection(factory, id, getJdbcConnection(userName,
+                StringUtils.cloneCharArray(passwordChars))), prof);
     }
 
     /**
@@ -367,8 +380,8 @@ public class JdbcDataSource extends TraceObject implements XADataSource,
             debugCode("getXAConnection("+quote(user)+", \"\");");
         }
         int id = getNextId(XA_DATA_SOURCE);
-        return new JdbcXAConnection(factory, id, getJdbcConnection(user,
-                convertToCharArray(password)));
+        return new XAConnectionWrapper(new JdbcXAConnection(factory, id, getJdbcConnection(user,
+                convertToCharArray(password))), prof);
     }
 
     /**
