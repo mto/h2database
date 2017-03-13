@@ -23,6 +23,13 @@
     <url>https://github.com/h2database/h2database</url>
   </scm>
 
+  <repositories>
+    <repository>
+      <id>MVN_Repo</id>
+      <url>https://mvnrepository.com/artifact/</url>
+    </repository>
+  </repositories>
+
   <developers>
     <developer>
       <id>thomas.tom.mueller</id>
