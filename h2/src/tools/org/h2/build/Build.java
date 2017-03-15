@@ -208,7 +208,6 @@ public class Build extends BuildBase {
                 File.pathSeparator + "ext/slf4j-api-1.6.0.jar" +
                 File.pathSeparator + "ext/org.osgi.core-4.2.0.jar" +
                 File.pathSeparator + "ext/org.osgi.enterprise-4.2.0.jar" +
-                File.pathSeparator + "ext/log4j-1.2.12.jar" +
                 File.pathSeparator + "ext/jts-core-1.14.0.jar" +
                 File.pathSeparator + javaToolsJar;
         FileList files;

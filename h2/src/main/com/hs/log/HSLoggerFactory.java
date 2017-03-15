@@ -30,7 +30,7 @@ public class HSLoggerFactory {
             synchronized (HSLoggerFactory.class) {
                 if (instance == null) {
                     Iterator<HSLoggerProvider> lps = ServiceLoader.load(HSLoggerProvider.class).iterator();
-                    HSLoggerFactory tmp = new HSLoggerFactory(lps.hasNext() ? lps.next() : new Log4jHSLoggerProvider());
+                    HSLoggerFactory tmp = new HSLoggerFactory(lps.hasNext() ? lps.next() : new Slf4jHSLoggerProvider());
 
                     instance = tmp;
                 }

@@ -23,13 +23,6 @@
     <url>https://github.com/h2database/h2database</url>
   </scm>
 
-  <repositories>
-    <repository>
-      <id>MVN_Repo</id>
-      <url>https://mvnrepository.com/artifact/</url>
-    </repository>
-  </repositories>
-
   <developers>
     <developer>
       <id>thomas.tom.mueller</id>
@@ -64,11 +57,6 @@
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
       <version>${slf4j.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>log4j</groupId>
-      <artifactId>log4j</artifactId>
-      <version>1.2.14</version>
     </dependency>
     <dependency>
       <groupId>org.osgi</groupId>

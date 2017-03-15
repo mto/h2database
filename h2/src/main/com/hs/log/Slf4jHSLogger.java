@@ -1,66 +1,70 @@
 package com.hs.log;
 
-import org.apache.log4j.Logger;
+
+import org.slf4j.Logger;
 
 /**
  * @author <a href="hoang281283@gmail.com">Minh Hoang TO</a>
  * @date: 2/2/17
  */
-public class Log4jHSLogger implements HSLogger {
+public class Slf4jHSLogger implements HSLogger {
 
-    private final Logger log4j;
+    private final Logger slf4j;
+    
+    private final String marker = "";
 
-    public Log4jHSLogger(Logger _log4j){
-        this.log4j = _log4j;
+    public Slf4jHSLogger(Logger _log4j){
+        this.slf4j = _log4j;
     }
 
     @Override
     public void trace(Object msg) {
-        log4j.trace(msg);
+        
+        slf4j.trace(marker, msg);
     }
 
     @Override
     public void trace(Object msg, Throwable t) {
-        log4j.trace(msg, t);
+        slf4j.trace(marker, msg, t);
     }
 
     @Override
     public void debug(Object msg) {
-        log4j.debug(msg);
+        slf4j.debug(marker, msg);
     }
 
     @Override
     public void debug(Object msg, Throwable t) {
-        log4j.debug(msg, t);
+        slf4j.debug(marker, msg, t);
     }
 
     @Override
     public void info(Object msg) {
-        log4j.info(msg);
+        slf4j.info(marker, msg);
     }
 
     @Override
     public void info(Object msg, Throwable t) {
-        log4j.info(msg, t);
+        slf4j.info(marker, msg, t);
     }
 
     @Override
     public void warn(Object msg) {
-        log4j.warn(msg);
+        slf4j.warn(marker, msg);
     }
 
     @Override
     public void warn(Object msg, Throwable t) {
-        log4j.warn(msg, t);
+        slf4j.warn(marker, msg, t);
     }
 
     @Override
     public void error(Object msg) {
-        log4j.error(msg);
+        slf4j.error(marker, msg);
     }
 
     @Override
     public void error(Object msg, Throwable t) {
-        log4j.error(msg, t);
+        slf4j.error(marker, msg, t);
     }
 }
