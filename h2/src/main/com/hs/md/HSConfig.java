@@ -59,9 +59,17 @@ public class HSConfig {
             BufferedReader rd = new BufferedReader(new InputStreamReader(is));
 
             String line;
+            String currentAlias = "";
             while ((line = rd.readLine()) != null) {
+                line = line.trim();
+
                 if (!line.isEmpty() && line.charAt(0) != '#') {
-                    processLine(line, pBuilders);
+
+                    if (line.charAt('0') == '[' && line.endsWith("]")) {
+                        currentAlias = line.substring(1, line.length() - 1);
+                    } else if (!currentAlias.isEmpty()) {
+                        processLine(line, currentAlias, pBuilders);
+                    }
                 }
             }
         } catch (Exception ex) {
@@ -75,24 +83,18 @@ public class HSConfig {
             }
         }
 
-        for(Map.Entry<String, Profile.Builder> e : pBuilders.entrySet()){
+        for (Map.Entry<String, Profile.Builder> e : pBuilders.entrySet()) {
             profiles.put(e.getKey(), e.getValue().build());
         }
     }
 
-    private void processLine(final String line, final Map<String, Profile.Builder> pBuilders) {
-        int fidex = line.indexOf('.');
-        if (fidex > 0) {
-            String alias = line.substring(0, fidex);
-
-            Profile.Builder b = pBuilders.get(alias);
-            if (b == null) {
-                b = new Profile.Builder(alias);
-                pBuilders.put(alias, b);
-            }
-
-            b.addLine(line.substring(fidex + 1));
+    private void processLine(final String line, final String alias, final Map<String, Profile.Builder> pBuilders) {
+        Profile.Builder b = pBuilders.get(alias);
+        if (b == null) {
+            b = new Profile.Builder(alias);
+            pBuilders.put(alias, b);
         }
 
+        b.addLine(line);
     }
 }
