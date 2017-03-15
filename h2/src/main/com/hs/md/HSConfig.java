@@ -1,5 +1,8 @@
 package com.hs.md;
 
+import com.hs.log.HSLogger;
+import com.hs.log.HSLoggerFactory;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -22,6 +25,8 @@ public class HSConfig {
     public final static String JDBC_DB_MAJOR_VERSION_NAME = "DatabaseMajorVersion";
 
     private static volatile HSConfig instance;
+
+    private static final HSLogger logger = HSLoggerFactory.getLogger(HSConfig.class);
 
     private Map<String, Profile> profiles = new HashMap<>();
 
@@ -51,6 +56,7 @@ public class HSConfig {
     }
 
     public void loadConfig(String fn) {
+        logger.info("Load config from " + fn + "\n");
         final Map<String, Profile.Builder> pBuilders = new HashMap<>();
 
         InputStream is = null;
@@ -67,6 +73,7 @@ public class HSConfig {
 
                     if (line.charAt(0) == '[' && line.endsWith("]")) {
                         currentAlias = line.substring(1, line.length() - 1);
+                        logger.info("Get new profile name '" + currentAlias + "'\n");
                     } else if (!currentAlias.isEmpty()) {
                         processLine(line, currentAlias, pBuilders);
                     }
