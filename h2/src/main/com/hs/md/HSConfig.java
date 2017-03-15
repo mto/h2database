@@ -65,7 +65,7 @@ public class HSConfig {
 
                 if (!line.isEmpty() && line.charAt(0) != '#') {
 
-                    if (line.charAt('0') == '[' && line.endsWith("]")) {
+                    if (line.charAt(0) == '[' && line.endsWith("]")) {
                         currentAlias = line.substring(1, line.length() - 1);
                     } else if (!currentAlias.isEmpty()) {
                         processLine(line, currentAlias, pBuilders);
