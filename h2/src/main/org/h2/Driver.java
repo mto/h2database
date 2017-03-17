@@ -66,6 +66,7 @@ public class Driver implements java.sql.Driver, JdbcDriverBackwardsCompat {
             Iterator<Profile> profiles = hsc.getProfiles().values().iterator();
 
             Profile prof = profiles.next();
+            logger.info("Getting connection with prof " + prof.getName() + " in ClassLoader:" + prof.getClass().getClassLoader().toString());
 
             if (info == null) {
                 info = new Properties();
@@ -74,13 +75,16 @@ public class Driver implements java.sql.Driver, JdbcDriverBackwardsCompat {
                 return null;
             }
             if (url.equals(DEFAULT_URL)) {
-                return new ConnectionWrapper(DEFAULT_CONNECTION.get(), prof);
+                return DEFAULT_CONNECTION.get();
+                //return new ConnectionWrapper(DEFAULT_CONNECTION.get(), prof);
             }
             Connection c = DbUpgrade.connectOrUpgrade(url, info);
             if (c != null) {
-                return new ConnectionWrapper(c, prof);
+                return c;
+                //return new ConnectionWrapper(c, prof);
             }
-            return new ConnectionWrapper(new JdbcConnection(url, info), prof);
+            return new JdbcConnection(url, info);
+            //return new ConnectionWrapper(new JdbcConnection(url, info), prof);
         } catch (Exception e) {
             throw DbException.toSQLException(e);
         }
