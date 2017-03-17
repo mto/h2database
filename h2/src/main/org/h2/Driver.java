@@ -9,8 +9,15 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.DriverPropertyInfo;
 import java.sql.SQLException;
+import java.util.Iterator;
 import java.util.Properties;
 import java.util.logging.Logger;
+
+import com.hs.log.HSLogger;
+import com.hs.log.HSLoggerFactory;
+import com.hs.md.HSConfig;
+import com.hs.md.Profile;
+import com.hs.sql.ConnectionWrapper;
 import org.h2.engine.Constants;
 import org.h2.jdbc.JdbcConnection;
 import org.h2.message.DbException;
@@ -37,6 +44,8 @@ public class Driver implements java.sql.Driver, JdbcDriverBackwardsCompat {
 
     private static volatile boolean registered;
 
+    private static final HSLogger logger = HSLoggerFactory.getLogger(Driver.class);
+
     static {
         load();
     }
@@ -53,6 +62,11 @@ public class Driver implements java.sql.Driver, JdbcDriverBackwardsCompat {
     @Override
     public Connection connect(String url, Properties info) throws SQLException {
         try {
+            HSConfig hsc = HSConfig.getInstance();
+            Iterator<Profile> profiles = hsc.getProfiles().values().iterator();
+
+            Profile prof = profiles.next();
+
             if (info == null) {
                 info = new Properties();
             }
@@ -60,13 +74,13 @@ public class Driver implements java.sql.Driver, JdbcDriverBackwardsCompat {
                 return null;
             }
             if (url.equals(DEFAULT_URL)) {
-                return DEFAULT_CONNECTION.get();
+                return new ConnectionWrapper(DEFAULT_CONNECTION.get(), prof);
             }
             Connection c = DbUpgrade.connectOrUpgrade(url, info);
             if (c != null) {
-                return c;
+                return new ConnectionWrapper(c, prof);
             }
-            return new JdbcConnection(url, info);
+            return new ConnectionWrapper(new JdbcConnection(url, info), prof);
         } catch (Exception e) {
             throw DbException.toSQLException(e);
         }
