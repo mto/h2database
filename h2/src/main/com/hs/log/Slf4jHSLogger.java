@@ -20,51 +20,51 @@ public class Slf4jHSLogger implements HSLogger {
     @Override
     public void trace(Object msg) {
         
-        slf4j.trace(marker, msg);
+        slf4j.trace(msg.toString());
     }
 
     @Override
     public void trace(Object msg, Throwable t) {
-        slf4j.trace(marker, msg, t);
+        slf4j.trace(msg.toString(), t);
     }
 
     @Override
     public void debug(Object msg) {
-        slf4j.debug(marker, msg);
+        slf4j.debug(msg.toString());
     }
 
     @Override
     public void debug(Object msg, Throwable t) {
-        slf4j.debug(marker, msg, t);
+        slf4j.debug(msg.toString(), t);
     }
 
     @Override
     public void info(Object msg) {
-        slf4j.info(marker, msg);
+        slf4j.info(msg.toString());
     }
 
     @Override
     public void info(Object msg, Throwable t) {
-        slf4j.info(marker, msg, t);
+        slf4j.info(msg.toString(), t);
     }
 
     @Override
     public void warn(Object msg) {
-        slf4j.warn(marker, msg);
+        slf4j.warn(msg.toString());
     }
 
     @Override
     public void warn(Object msg, Throwable t) {
-        slf4j.warn(marker, msg, t);
+        slf4j.warn(msg.toString(), t);
     }
 
     @Override
     public void error(Object msg) {
-        slf4j.error(marker, msg);
+        slf4j.error(msg.toString());
     }
 
     @Override
     public void error(Object msg, Throwable t) {
-        slf4j.error(marker, msg, t);
+        slf4j.error(msg.toString(), t);
     }
 }

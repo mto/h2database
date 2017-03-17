@@ -23,6 +23,8 @@ import javax.sql.PooledConnection;
 import javax.sql.XAConnection;
 import javax.sql.XADataSource;
 
+import com.hs.log.HSLogger;
+import com.hs.log.HSLoggerFactory;
 import com.hs.md.HSConfig;
 import com.hs.md.Profile;
 import com.hs.sql.ConnectionWrapper;
@@ -81,6 +83,8 @@ public class JdbcDataSource extends TraceObject implements XADataSource,
 
     private final Profile prof;
 
+    private static final HSLogger logger = HSLoggerFactory.getLogger(JdbcDataSource.class);
+
     static {
         org.h2.Driver.load();
     }
@@ -89,6 +93,8 @@ public class JdbcDataSource extends TraceObject implements XADataSource,
      * The public constructor.
      */
     public JdbcDataSource() {
+        logger.info("Calling constructor of JdbcDataSource");
+
         initFactory();
         int id = getNextId(TraceObject.DATA_SOURCE);
         setTrace(factory.getTrace(), TraceObject.DATA_SOURCE, id);
